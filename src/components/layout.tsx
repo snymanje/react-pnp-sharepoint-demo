@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from "@azure/msal-react";
+import { loginRequest } from "../authConfig";
+
 import {
   Drawer,
   List,
@@ -12,11 +15,14 @@ import {
   Avatar,
   IconButton,
   Hidden,
+  MenuItem,
+  Menu,
 } from "@material-ui/core";
 import { AddCircleOutlined, SubjectOutlined } from "@material-ui/icons";
 import MenuIcon from "@material-ui/icons/Menu";
 import CloseIcon from "@material-ui/icons/Close";
-// import { useHistory } from "react-router";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import { useHistory, useLocation } from "react-router";
 
 const drawerWidth = 240;
 
@@ -65,29 +71,49 @@ const useStyles = makeStyles((theme: any) => {
     avatar: {
       marginLeft: theme.spacing(2),
     },
+    menudropdown: {
+      marginRight: theme.spacing(1),
+    },
   };
 });
 
 export const PageLayout = (props: any) => {
   const classes = useStyles();
-  //const history = useHistory();
-  //const location = useLocation();
+  const history = useHistory();
+  const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { instance } = useMsal();
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
 
   function handleDrawerToggle() {
     setMobileOpen(!mobileOpen);
   }
 
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   const menuItems = [
     {
-      text: "My Notes",
+      text: "Home",
       icon: <SubjectOutlined color='secondary' />,
       path: "/",
     },
     {
-      text: "Create Notes",
+      text: "Page 1",
       icon: <AddCircleOutlined color='secondary' />,
-      path: "/create",
+      path: "/page1",
+    },
+    {
+      text: "Page 2",
+      icon: <AddCircleOutlined color='secondary' />,
+      path: "/page2",
     },
   ];
 
@@ -107,6 +133,46 @@ export const PageLayout = (props: any) => {
           <Typography className={classes.appbartitle}>SharePoint App</Typography>
           <Typography>JeanSn</Typography>
           <Avatar src='https://i.pravatar.cc/300' className={classes.avatar} />
+          <div>
+            <IconButton
+              aria-label='account of current user'
+              aria-controls='menu-appbar'
+              aria-haspopup='true'
+              onClick={handleMenu}
+              color='inherit'
+            >
+              <AccountCircle />
+            </IconButton>
+            <Menu
+              id='menu-appbar'
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={open}
+              onClose={handleClose}
+            >
+              <AuthenticatedTemplate>
+                <MenuItem onClick={() => instance.logout()}>
+                  <AccountCircle />
+                  Logout
+                </MenuItem>
+              </AuthenticatedTemplate>
+              <UnauthenticatedTemplate>
+                <MenuItem onClick={() => instance.loginRedirect(loginRequest)}>
+                  <AccountCircle className={classes.menudropdown} />
+                  Login
+                </MenuItem>
+                <MenuItem onClick={handleClose}>My account</MenuItem>
+              </UnauthenticatedTemplate>
+            </Menu>
+          </div>
         </Toolbar>
       </AppBar>
 
@@ -126,19 +192,37 @@ export const PageLayout = (props: any) => {
               </IconButton>
             </div>
 
-            <List>
-              {menuItems.map((item) => (
-                <ListItem
-                  button
-                  key={item.text}
-                  /* onClick={() => history.push(item.path)} */
-                  /*  className={location.pathname === item.path ? classes.active : null} */
-                >
-                  <ListItemIcon>{item.icon}</ListItemIcon>
-                  <ListItemText primary={item.text} />
+            <AuthenticatedTemplate>
+              <List>
+                {menuItems.map((item) => (
+                  <ListItem
+                    button
+                    key={item.text}
+                    onClick={() => history.push(item.path)}
+                    className={location.pathname === item.path ? classes.active : null}
+                  >
+                    <ListItemIcon>{item.icon}</ListItemIcon>
+                    <ListItemText primary={item.text} />
+                  </ListItem>
+                ))}
+                <ListItem button onClick={() => instance.logout()}>
+                  <ListItemIcon color='secondary'>
+                    <AccountCircle />
+                  </ListItemIcon>
+                  <ListItemText primary='Logout' />
                 </ListItem>
-              ))}
-            </List>
+              </List>
+            </AuthenticatedTemplate>
+            <UnauthenticatedTemplate>
+              <List>
+                <ListItem button onClick={() => instance.loginRedirect(loginRequest)}>
+                  <ListItemIcon color='secondary'>
+                    <AccountCircle />
+                  </ListItemIcon>
+                  <ListItemText primary='Login' />
+                </ListItem>
+              </List>
+            </UnauthenticatedTemplate>
           </Drawer>
         </Hidden>
 
@@ -149,28 +233,43 @@ export const PageLayout = (props: any) => {
             variant='permanent'
             classes={{ paper: classes.drawerPaper }}
           >
-            <List className={classes.permanentMargin}>
-              {menuItems.map((item) => (
-                <ListItem
-                  button
-                  key={item.text}
-                  /* onClick={() => history.push(item.path)} */
-                  /*  className={location.pathname === item.path ? classes.active : null} */
-                >
-                  <ListItemIcon>{item.icon}</ListItemIcon>
-                  <ListItemText primary={item.text} />
+            <AuthenticatedTemplate>
+              <List className={classes.permanentMargin}>
+                {menuItems.map((item) => (
+                  <ListItem
+                    button
+                    key={item.text}
+                    onClick={() => history.push(item.path)}
+                    className={location.pathname === item.path ? classes.active : null}
+                  >
+                    <ListItemIcon>{item.icon}</ListItemIcon>
+                    <ListItemText primary={item.text} />
+                  </ListItem>
+                ))}
+                <ListItem button onClick={() => instance.logout()}>
+                  <ListItemIcon color='secondary'>
+                    <AccountCircle />
+                  </ListItemIcon>
+                  <ListItemText primary='Logout' />
                 </ListItem>
-              ))}
-            </List>
+              </List>
+            </AuthenticatedTemplate>
+            <UnauthenticatedTemplate>
+              <List className={classes.permanentMargin}>
+                <ListItem button onClick={() => instance.loginRedirect(loginRequest)}>
+                  <ListItemIcon color='secondary'>
+                    <AccountCircle />
+                  </ListItemIcon>
+                  <ListItemText primary='Login' />
+                </ListItem>
+              </List>
+            </UnauthenticatedTemplate>
           </Drawer>
         </Hidden>
       </nav>
 
       <div className={classes.page}>
-        <div className={classes.toolbar}>
-          <Typography>This is the content</Typography>
-          {props.children}
-        </div>
+        <div className={classes.toolbar}>{props.children}</div>
       </div>
     </div>
   );
