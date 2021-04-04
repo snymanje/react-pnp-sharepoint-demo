@@ -10,13 +10,12 @@ import Tabledata from "./muiTable";
 //import { graph } from "@pnp/graph";
 import "@pnp/graph/users";
 import { LambdaFetchClient } from "@pnp/common";
-import { sp } from "@pnp/sp";
-import "@pnp/sp/webs";
+import { sp } from "@pnp/sp/presets/all";
 
 const ProfileContent = () => {
   const { instance, accounts } = useMsal();
   const account = useAccount(accounts[0] || {});
-  const [graphData, setGraphData] = useState(null);
+  const [spData, setSpData] = useState([]);
 
   const RequestProfileData = async () => {
     if (account) {
@@ -61,23 +60,28 @@ const ProfileContent = () => {
           baseUrl: "https://tfgonline.sharepoint.com/sites/DMSampleLocationTrackingDEV",
         },
       });
-      const w = await sp.web.select("Title")();
-      console.log(`Web Title: ${w.Title}`);
+      const w = await sp.web.lists.getByTitle("Samples").items.select("Title", "ID").get();
+      setSpData(w);
     }
   };
 
   return (
     <>
       <div className='container'>
-        <Tabledata />
+        {/* <Tabledata /> */}
         <h5 className='card-title'>Welcome {account ? account.name : "unknown"}</h5>
-        {/* {graphData ? (
-          <ProfileData graphData={graphData} />
-        ) : (
-          <Button color='secondary' onClick={RequestProfileData}>
-            Request Profile Information
-          </Button>
-        )} */}
+        <Button color='secondary' onClick={RequestProfileData}>
+          Request Profile Information
+        </Button>
+        <div>
+          {spData.map((item) => (
+            <div>
+              <p>{item.Title}</p>
+            <p>{item.ID}</p>
+            </div>
+            
+          ))}
+        </div>
       </div>
     </>
   );

@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) =>
 export const MenuAppBar = () => {
   const classes = useStyles();
   const [auth, setAuth] = React.useState(true);
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
   const { instance } = useMsal();
@@ -49,18 +49,18 @@ export const MenuAppBar = () => {
     <div className={classes.root}>
       <AppBar position='static'>
         <Toolbar>
-          <IconButton edge='start' className={classes.menuButton} color='inherit' aria-label='menu'>
+          {/*  <IconButton edge='start' className={classes.menuButton} color='inherit' aria-label='menu'>
             <MenuIcon />
-          </IconButton>
+          </IconButton> */}
           <Typography variant='h6' className={classes.title}>
-            Photos
+            SharePoint App
           </Typography>
           {auth && (
             <div>
               <IconButton
                 aria-label='account of current user'
                 aria-controls='menu-appbar'
-                aria-haspopup='true'
+                // aria-haspopup='true'
                 onClick={handleMenu}
                 color='inherit'
               >
