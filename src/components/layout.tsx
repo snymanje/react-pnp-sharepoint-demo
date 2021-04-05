@@ -17,13 +17,14 @@ import {
   Hidden,
   MenuItem,
   Menu,
+  Button,
 } from "@material-ui/core";
 import { AddCircleOutlined, SubjectOutlined } from "@material-ui/icons";
 import MenuIcon from "@material-ui/icons/Menu";
 import CloseIcon from "@material-ui/icons/Close";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import { useHistory, useLocation } from "react-router";
-import logo from "../images/TFGlogo.jpg";
+import logo from "../images/TFGlogoCropped.jpg";
 
 const drawerWidth = 240;
 
@@ -34,7 +35,6 @@ const useStyles = makeStyles((theme: any) => {
       padding: theme.spacing(10),
     },
     logo: {
-      width: "140px",
       height: "100%",
     },
     drawer: {
@@ -53,6 +53,12 @@ const useStyles = makeStyles((theme: any) => {
       marginRight: theme.spacing(2),
       [theme.breakpoints.up("sm")]: {
         display: "none",
+      },
+    },
+    username: {
+      display: "none",
+      [theme.breakpoints.up("sm")]: {
+        display: "block",
       },
     },
     closeMenuButton: {
@@ -93,11 +99,11 @@ export const PageLayout = (props: any) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  function handleDrawerToggle() {
+  const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
-  }
+  };
 
-  const handleMenu = (event) => {
+  const handleMenu = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -137,9 +143,16 @@ export const PageLayout = (props: any) => {
             <MenuIcon />
           </IconButton>
           <img src={logo} alt='Kitty Katty!' className={classes.logo} />
-          <Typography className={classes.appbartitle}>SharePoint App</Typography>
-          <Typography>Jean Snyman</Typography>
-          <div>
+          <Typography className={classes.appbartitle} variant='h5'>
+            SharePoint App
+          </Typography>
+          <UnauthenticatedTemplate>
+            <Button color='inherit' onClick={() => instance.loginRedirect(loginRequest)}>
+              Login
+            </Button>
+          </UnauthenticatedTemplate>
+          <AuthenticatedTemplate>
+            <Typography className={classes.username}>Jean Snyman</Typography>
             <Avatar
               src='https://i.pravatar.cc/300'
               className={classes.avatar}
@@ -148,45 +161,13 @@ export const PageLayout = (props: any) => {
               aria-haspopup='true'
               onClick={handleMenu}
             />
-
-            {/* <IconButton
-              aria-label='account of current user'
-              aria-controls='menu-appbar'
-              aria-haspopup='true'
-              onClick={handleMenu}
-              color='inherit'
-            >
-              <AccountCircle />
-            </IconButton> */}
-            <Menu
-              id='menu-appbar'
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={open}
-              onClose={handleClose}
-            >
-              <AuthenticatedTemplate>
-                <MenuItem onClick={() => instance.logout()}>
-                  <AccountCircle />
-                  Logout
-                </MenuItem>
-              </AuthenticatedTemplate>
-              <UnauthenticatedTemplate>
-                <MenuItem onClick={() => instance.loginRedirect(loginRequest)}>
-                  <AccountCircle className={classes.menudropdown} />
-                  Login
-                </MenuItem>
-              </UnauthenticatedTemplate>
+            <Menu id='menu-appbar' anchorEl={anchorEl} open={open} onClose={handleClose}>
+              <MenuItem onClick={() => instance.logout()}>
+                <AccountCircle />
+                Logout
+              </MenuItem>
             </Menu>
-          </div>
+          </AuthenticatedTemplate>
         </Toolbar>
       </AppBar>
 
@@ -213,7 +194,7 @@ export const PageLayout = (props: any) => {
                     button
                     key={item.text}
                     onClick={() => history.push(item.path)}
-                    className={location.pathname === item.path ? classes.active : null}
+                    className={location.pathname === item.path ? classes.active : undefined}
                   >
                     <ListItemIcon>{item.icon}</ListItemIcon>
                     <ListItemText primary={item.text} />
@@ -254,7 +235,7 @@ export const PageLayout = (props: any) => {
                     button
                     key={item.text}
                     onClick={() => history.push(item.path)}
-                    className={location.pathname === item.path ? classes.active : null}
+                    className={location.pathname === item.path ? classes.active : undefined}
                   >
                     <ListItemIcon>{item.icon}</ListItemIcon>
                     <ListItemText primary={item.text} />
