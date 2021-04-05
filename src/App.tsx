@@ -3,7 +3,7 @@ import { MsalProvider, AuthenticatedTemplate, UnauthenticatedTemplate } from "@a
 import { loginRequest } from "./config/authConfig";
 import { PublicClientApplication } from "@azure/msal-browser";
 import { msalConfig } from "./config/authConfig";
-import { PageLayout } from "./components/layout";
+import { PageLayout } from "./components/layout/layout";
 import { makeStyles } from "@material-ui/core/styles";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
@@ -18,6 +18,9 @@ const theme = createMuiTheme({
   palette: {
     primary: {
       main: "#4E1645",
+    },
+    secondary: {
+      main: "#63be45",
     },
   },
 });
