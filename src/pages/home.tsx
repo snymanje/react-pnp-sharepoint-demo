@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useMsal, useAccount } from "@azure/msal-react";
-import { loginRequest } from "./authConfig";
+import { loginRequest } from "../config/authConfig";
 //import { ProfileData, graphService, graphSPService } from "./graph";
 //import "./styles/App.css";
 import { Button } from "@material-ui/core";
 
-import Tabledata from "./muiTable";
+import Tabledata from "../components/muiTable";
 
 //import { graph } from "@pnp/graph";
 import "@pnp/graph/users";
@@ -77,9 +77,8 @@ const ProfileContent = () => {
           {spData.map((item) => (
             <div>
               <p>{item.Title}</p>
-            <p>{item.ID}</p>
+              <p>{item.ID}</p>
             </div>
-            
           ))}
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from "@azure/msal-react";
-import { loginRequest } from "../authConfig";
+import { loginRequest } from "../config/authConfig";
 
 import {
   Drawer,
@@ -23,6 +23,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import CloseIcon from "@material-ui/icons/Close";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import { useHistory, useLocation } from "react-router";
+import logo from "../images/TFGlogo.jpg";
 
 const drawerWidth = 240;
 
@@ -31,6 +32,10 @@ const useStyles = makeStyles((theme: any) => {
     page: {
       width: "100%",
       padding: theme.spacing(10),
+    },
+    logo: {
+      width: "140px",
+      height: "100%",
     },
     drawer: {
       [theme.breakpoints.up("sm")]: {
@@ -66,6 +71,7 @@ const useStyles = makeStyles((theme: any) => {
     },
     appbartitle: {
       flexGrow: 1,
+      textAlign: "center",
     },
     toolbar: theme.mixins.toolbar,
     avatar: {
@@ -130,11 +136,20 @@ export const PageLayout = (props: any) => {
           >
             <MenuIcon />
           </IconButton>
+          <img src={logo} alt='Kitty Katty!' className={classes.logo} />
           <Typography className={classes.appbartitle}>SharePoint App</Typography>
-          <Typography>JeanSn</Typography>
-          <Avatar src='https://i.pravatar.cc/300' className={classes.avatar} />
+          <Typography>Jean Snyman</Typography>
           <div>
-            <IconButton
+            <Avatar
+              src='https://i.pravatar.cc/300'
+              className={classes.avatar}
+              aria-label='account of current user'
+              aria-controls='menu-appbar'
+              aria-haspopup='true'
+              onClick={handleMenu}
+            />
+
+            {/* <IconButton
               aria-label='account of current user'
               aria-controls='menu-appbar'
               aria-haspopup='true'
@@ -142,7 +157,7 @@ export const PageLayout = (props: any) => {
               color='inherit'
             >
               <AccountCircle />
-            </IconButton>
+            </IconButton> */}
             <Menu
               id='menu-appbar'
               anchorEl={anchorEl}
@@ -169,7 +184,6 @@ export const PageLayout = (props: any) => {
                   <AccountCircle className={classes.menudropdown} />
                   Login
                 </MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
               </UnauthenticatedTemplate>
             </Menu>
           </div>
