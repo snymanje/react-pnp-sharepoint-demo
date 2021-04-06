@@ -1,7 +1,22 @@
-import React from "react";
+import { useEffect } from "react";
+import { useSharePoint } from "../hooks/useSharePoint";
 
-const page1 = () => {
-  return <div>Page1</div>;
+const Page1 = () => {
+  const { spData } = useSharePoint();
+
+  useEffect(() => {
+    console.log(spData);
+  });
+  return (
+    <div>
+      {spData.map((item) => (
+        <div>
+          <p>{item.Title}</p>
+          <p>{item.ID}</p>
+        </div>
+      ))}
+    </div>
+  );
 };
 
-export default page1;
+export default Page1;

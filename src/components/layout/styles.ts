@@ -16,8 +16,11 @@ export const useStyles = makeStyles((theme: any) => {
           flexShrink: 0,
         },
       },
-      permanentMargin: {
-        marginTop: theme.spacing(10),
+      drawerList: {
+        marginTop: theme.spacing(1),
+        [theme.breakpoints.up("sm")]: {
+          marginTop: theme.spacing(10)
+        },
       },
       drawerPaper: {
         width: drawerWidth,

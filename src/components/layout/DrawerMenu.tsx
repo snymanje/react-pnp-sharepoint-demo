@@ -10,29 +10,11 @@ import {
   ListItemText,
   Hidden,
   IconButton,
+  Divider,
 } from "@material-ui/core";
-import { AddCircleOutlined, SubjectOutlined } from "@material-ui/icons";
-import CloseIcon from "@material-ui/icons/Close";
-import AccountCircle from "@material-ui/icons/AccountCircle";
+import { Close, AccountCircle } from "@material-ui/icons";
 import { useStyles } from "./styles";
-
-const menuItems = [
-  {
-    text: "Home",
-    icon: <SubjectOutlined color='secondary' />,
-    path: "/",
-  },
-  {
-    text: "Page 1",
-    icon: <AddCircleOutlined color='secondary' />,
-    path: "/page1",
-  },
-  {
-    text: "Page 2",
-    icon: <AddCircleOutlined color='secondary' />,
-    path: "/page2",
-  },
-];
+import { menuItems } from "./menuLinks";
 
 const DrawerMenu = ({
   handleDrawerToggle,
@@ -49,7 +31,7 @@ const DrawerMenu = ({
   const DrawerItems = (
     <div>
       <AuthenticatedTemplate>
-        <List className={classes.permanentMargin}>
+        <List className={classes.drawerList}>
           {menuItems.map((item) => (
             <ListItem
               button
@@ -61,6 +43,7 @@ const DrawerMenu = ({
               <ListItemText primary={item.text} />
             </ListItem>
           ))}
+          <Divider light />
           <ListItem button onClick={() => instance.logout()}>
             <ListItemIcon>
               <AccountCircle color='secondary' />
@@ -70,7 +53,7 @@ const DrawerMenu = ({
         </List>
       </AuthenticatedTemplate>
       <UnauthenticatedTemplate>
-        <List className={classes.permanentMargin}>
+        <List className={classes.drawerList}>
           <ListItem button onClick={() => instance.loginRedirect(loginRequest)}>
             <ListItemIcon>
               <AccountCircle color='secondary' />
@@ -95,7 +78,7 @@ const DrawerMenu = ({
         >
           <div>
             <IconButton onClick={handleDrawerToggle} className={classes.closeMenuButton}>
-              <CloseIcon />
+              <Close />
             </IconButton>
           </div>
           {DrawerItems}

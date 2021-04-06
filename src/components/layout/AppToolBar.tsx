@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from "@azure/msal-react";
 import { loginRequest } from "../../config/authConfig";
+import { useMSGraphMe } from "../../hooks/useMSGraphMe";
 import {
   Typography,
   AppBar,
@@ -20,8 +21,10 @@ import { AccountCircle } from "@material-ui/icons";
 const AppToolBar = ({ handleDrawerToggle }: { handleDrawerToggle: any }) => {
   const classes = useStyles();
   const { instance } = useMsal();
+  const { me } = useMSGraphMe();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [meData, setMeData] = useState({});
   const open = Boolean(anchorEl);
 
   const handleMenu = (event: any) => {
@@ -31,6 +34,11 @@ const AppToolBar = ({ handleDrawerToggle }: { handleDrawerToggle: any }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  useEffect(() => {
+    setMeData(me);
+    console.log(meData);
+  }, [me, meData]);
 
   return (
     <AppBar elevation={0} position='fixed' className={classes.appbar}>
@@ -54,15 +62,16 @@ const AppToolBar = ({ handleDrawerToggle }: { handleDrawerToggle: any }) => {
           </Button>
         </UnauthenticatedTemplate>
         <AuthenticatedTemplate>
-          <Typography className={classes.username}>Jean Snyman</Typography>
+          <Typography className={classes.username}>{meData.displayName}</Typography>
           <Avatar
-            src='https://i.pravatar.cc/300'
             className={classes.avatar}
             aria-label='account of current user'
             aria-controls='menu-appbar'
             aria-haspopup='true'
             onClick={handleMenu}
-          />
+          >
+            {`${meData.givenName[0]}${meData.surname[0]}`}
+          </Avatar>
           <Menu id='menu-appbar' anchorEl={anchorEl} open={open} onClose={handleClose}>
             <MenuItem onClick={() => instance.logout()}>
               <AccountCircle />

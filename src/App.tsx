@@ -3,13 +3,13 @@ import { MsalProvider, AuthenticatedTemplate, UnauthenticatedTemplate } from "@a
 import { loginRequest } from "./config/authConfig";
 import { PublicClientApplication } from "@azure/msal-browser";
 import { msalConfig } from "./config/authConfig";
-import { PageLayout } from "./components/layout/layout";
+import { PageLayout } from "./components/layout/Layout";
 import { makeStyles } from "@material-ui/core/styles";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 
 import ProfileContent from "./pages/home";
-import Page1 from "./pages/page1";
+import Page1 from "./pages/Page1";
 import Page2 from "./pages/page2";
 import { Button, Typography } from "@material-ui/core";
 import { AccountCircle } from "@material-ui/icons";
