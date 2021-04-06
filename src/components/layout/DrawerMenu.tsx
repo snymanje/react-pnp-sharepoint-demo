@@ -36,7 +36,10 @@ const DrawerMenu = ({
             <ListItem
               button
               key={item.text}
-              onClick={() => history.push(item.path)}
+              onClick={() => {
+                handleDrawerToggle();
+                history.push(item.path);
+              }}
               className={location.pathname === item.path ? classes.active : undefined}
             >
               <ListItemIcon>{item.icon}</ListItemIcon>

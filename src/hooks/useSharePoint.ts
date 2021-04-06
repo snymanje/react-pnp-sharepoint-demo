@@ -29,10 +29,10 @@ const useSharePoint = () => {
         sp.setup({
           sp: {
             fetchClientFactory: () => client,
-            baseUrl: "https://tfgonline.sharepoint.com/sites/DMSampleLocationTrackingDEV",
+            baseUrl: "https://tfgonline.sharepoint.com/sites/M365React",
           },
         });
-        const w = await sp.web.lists.getByTitle("Samples").items.select("Title", "ID").get();
+        const w = await sp.web.lists.getByTitle("Employee").items.select("ID","Title","Name","Surname","Department").get();
         setSpData(w);
       }
     };

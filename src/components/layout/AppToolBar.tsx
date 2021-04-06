@@ -24,7 +24,11 @@ const AppToolBar = ({ handleDrawerToggle }: { handleDrawerToggle: any }) => {
   const { me } = useMSGraphMe();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [meData, setMeData] = useState({});
+  const [meData, setMeData] = useState({
+    displayName: "Welcome",
+    givenName: "Welcome",
+    surname: "Welcome",
+  });
   const open = Boolean(anchorEl);
 
   const handleMenu = (event: any) => {
@@ -69,9 +73,7 @@ const AppToolBar = ({ handleDrawerToggle }: { handleDrawerToggle: any }) => {
             aria-controls='menu-appbar'
             aria-haspopup='true'
             onClick={handleMenu}
-          >
-            {`${meData.givenName[0]}${meData.surname[0]}`}
-          </Avatar>
+          ></Avatar>
           <Menu id='menu-appbar' anchorEl={anchorEl} open={open} onClose={handleClose}>
             <MenuItem onClick={() => instance.logout()}>
               <AccountCircle />
