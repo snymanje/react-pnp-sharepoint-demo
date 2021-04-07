@@ -1,40 +1,85 @@
-import MaterialTable from "material-table";
+import { CircularProgress, Typography } from "@material-ui/core";
+import MUIDataTable from "mui-datatables";
 import { useSharePoint } from "../hooks/useSharePoint";
+import CustomToolbar from "../components/MuiDatatable/CustomToolbar";
+import CustomToolbarSelect from "../components/MuiDatatable/CustomToolbarSelect";
 
 const columns = [
-  { title: "ID", field: "ID" },
-  { title: "Title", field: "Title" },
-  { title: "Name", field: "Name" },
-  { title: "Surname", field: "Surname" },
-  { title: "Department", field: "Department" },
+  {
+    name: "ID",
+    label: "ID",
+    options: {
+      filter: true,
+      sort: true,
+    },
+  },
+  {
+    name: "Title",
+    label: "Title",
+    options: {
+      filter: true,
+      sort: true,
+    },
+  },
+  {
+    name: "Name",
+    label: "Name",
+    options: {
+      filter: true,
+      sort: true,
+    },
+  },
+  {
+    name: "Surname",
+    label: "Surname",
+    options: {
+      filter: true,
+      sort: true,
+    },
+  },
+  {
+    name: "Department",
+    label: "Department",
+    options: {
+      filter: true,
+      sort: true,
+    },
+  },
 ];
 
-const Page2 = () => {
-  const { spData } = useSharePoint();
-  spData.map((item) => console.log(Object.keys(item)));
-  console.log(spData);
+const options = {
+  filterType: "dropdown",
+  elevation: 2,
+  selectableRowsOnClick: false,
+  rowsPerPage: 10,
+  customToolbar: () => {
+    return <CustomToolbar />;
+  },
+  customToolbarSelect: (selectedRows) => <CustomToolbarSelect selectedRows={selectedRows} />,
+};
 
+const Page1 = () => {
+  const { spData, isLoading } = useSharePoint();
   return (
-    <div style={{ maxWidth: "100%" }}>
-      <MaterialTable
-        columns={columns}
+    <div>
+      <MUIDataTable
+        title={
+          <Typography variant='h6'>
+            ACME Employee list
+            {isLoading && (
+              <CircularProgress
+                size={24}
+                style={{ marginLeft: 15, position: "relative", top: 4 }}
+              />
+            )}
+          </Typography>
+        }
         data={spData}
-        title='SharePoint Data'
-        isLoading={false}
-        actions={[
-          {
-            icon: "delete",
-            tooltip: "Delete User",
-            onClick: (event, rowData) => alert("You want to delete " + rowData),
-          },
-        ]}
-        options={{
-          exportButton: true,
-          sorting: true,
-        }}
+        columns={columns}
+        options={options}
       />
     </div>
   );
 };
 
-export default Page2;
+export default Page1;

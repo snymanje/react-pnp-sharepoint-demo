@@ -8,7 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 
-import ProfileContent from "./pages/home";
+import ProfileContent from "./pages/Home";
 import Page1 from "./pages/Page1";
 import Page2 from "./pages/Page2";
 import { Button, Typography } from "@material-ui/core";

@@ -8,9 +8,11 @@ const useSharePoint = () => {
   const account = useAccount(accounts[0] || {});
 
   const [spData, setSpData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const handleAsyncFunc = async () => {
+      setIsLoading(true);
       if (account) {
         // create a new instance of the lambda fetch client
         const client = new LambdaFetchClient(async () => {
@@ -32,14 +34,15 @@ const useSharePoint = () => {
             baseUrl: "https://tfgonline.sharepoint.com/sites/M365React",
           },
         });
-        const w = await sp.web.lists.getByTitle("Employee").items.select("ID","Title","Name","Surname","Department").get();
-        setSpData(w);
+        const data = await sp.web.lists.getByTitle("Employee").items.select("ID","Title","Name","Surname","Department").get();
+        setSpData(data);
+        setIsLoading(false);
       }
     };
     handleAsyncFunc();
   }, [account, instance]);
 
-  return { spData };
+  return { spData, isLoading };
 };
 
 export { useSharePoint };

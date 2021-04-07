@@ -41,7 +41,6 @@ const AppToolBar = ({ handleDrawerToggle }: { handleDrawerToggle: any }) => {
 
   useEffect(() => {
     setMeData(me);
-    console.log(meData);
   }, [me, meData]);
 
   return (
