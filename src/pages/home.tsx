@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CircularProgress, Typography } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
 import { useSharePoint } from "../hooks/useSharePoint";
@@ -47,22 +47,40 @@ const columns = [
       sort: true,
     },
   },
+  {
+    name: "Modified",
+    label: "Modified",
+    options: {
+      filter: true,
+      sort: true,
+    },
+  },
 ];
 
 const Page1 = () => {
   const { spData, isLoading } = useSharePoint();
   const [drawerAddOpen, setdrawerAddOpen] = useState(false);
 
+  const [data, setData] = useState();
+
   const handleDrawerToggle = () => {
     setdrawerAddOpen(!drawerAddOpen);
   };
+
+  const handleDataUpdate = (someData) => {
+    setData((spData) => [...spData, someData]);
+  };
+
+  useEffect(() => {
+    setData(spData);
+  }, [spData]);
 
   return (
     <div>
       <MUIDataTable
         title={
           <Typography variant='h6'>
-            Employee list
+            Employee SharePoint List
             {isLoading && (
               <CircularProgress
                 size={24}
@@ -71,7 +89,7 @@ const Page1 = () => {
             )}
           </Typography>
         }
-        data={spData}
+        data={data}
         columns={columns}
         options={{
           filterType: "dropdown",
@@ -91,7 +109,11 @@ const Page1 = () => {
           ),
         }}
       />
-      <AddEditDrawer handleDrawerToggle={handleDrawerToggle} drawerAddOpen={drawerAddOpen} />
+      <AddEditDrawer
+        handleDrawerToggle={handleDrawerToggle}
+        drawerAddOpen={drawerAddOpen}
+        handleDataUpdate={handleDataUpdate}
+      />
     </div>
   );
 };

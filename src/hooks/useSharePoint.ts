@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { useMsal, useAccount } from "@azure/msal-react";
 import { LambdaFetchClient } from "@pnp/common";
-import { sp } from "@pnp/sp/presets/all";
+import { sp, SPRest } from "@pnp/sp/presets/all";
 
 const useSharePoint = () => {
   const { instance, accounts } = useMsal();
   const account = useAccount(accounts[0] || {});
 
   const [spData, setSpData] = useState([]);
+  const [pnpInstance, setPnpInstance] = useState<SPRest>();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -34,7 +35,8 @@ const useSharePoint = () => {
             baseUrl: "https://tfgonline.sharepoint.com/sites/M365React",
           },
         });
-        const data = await sp.web.lists.getByTitle("Employee").items.select("ID","Title","Name","Surname","Department").get();
+        setPnpInstance(sp);
+        const data = await sp.web.lists.getByTitle("Employee").items.select("ID","Title","Name","Surname","Department","Modified").get();
         setSpData(data);
         setIsLoading(false);
       }
@@ -42,7 +44,7 @@ const useSharePoint = () => {
     handleAsyncFunc();
   }, [account, instance]);
 
-  return { spData, isLoading };
+  return { spData, isLoading, pnpInstance };
 };
 
 export { useSharePoint };
