@@ -18,7 +18,7 @@ const useSharePoint = () => {
         // create a new instance of the lambda fetch client
         const client = new LambdaFetchClient(async () => {
           const request = {
-            scopes: ["https://tfgonline.sharepoint.com/.default"],
+            scopes: [`${process.env.REACT_APP_TENANT}/.default`],
           };
 
           const response = await instance.acquireTokenSilent({
@@ -32,7 +32,7 @@ const useSharePoint = () => {
         sp.setup({
           sp: {
             fetchClientFactory: () => client,
-            baseUrl: "https://tfgonline.sharepoint.com/sites/M365React",
+            baseUrl: `${process.env.REACT_APP_TENANT}/sites/M365React`,
           },
         });
         setPnpInstance(sp);
