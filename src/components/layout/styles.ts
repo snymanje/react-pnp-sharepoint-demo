@@ -1,6 +1,7 @@
 import {
     makeStyles
   } from "@material-ui/core";
+import { Block } from "@material-ui/icons";
 
 const drawerWidth = 240;
 
@@ -38,8 +39,9 @@ export const useStyles = makeStyles((theme: any) => {
         },
       },
       closeMenuButton: {
-        marginRight: "auto",
-        marginLeft: 0,
+        display: "block",
+        marginRight: 0,
+        marginLeft: "auto",
       },
       root: {
         display: "flex",

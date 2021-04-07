@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { CircularProgress, Typography } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
 import { useSharePoint } from "../hooks/useSharePoint";
 import CustomToolbar from "../components/MuiDatatable/CustomToolbar";
 import CustomToolbarSelect from "../components/MuiDatatable/CustomToolbarSelect";
+import AddEditDrawer from "../components/MuiDatatable/AddEditDrawer";
 
 const columns = [
   {
@@ -47,25 +49,20 @@ const columns = [
   },
 ];
 
-const options = {
-  filterType: "dropdown",
-  elevation: 2,
-  selectableRowsOnClick: false,
-  rowsPerPage: 10,
-  customToolbar: () => {
-    return <CustomToolbar />;
-  },
-  customToolbarSelect: (selectedRows) => <CustomToolbarSelect selectedRows={selectedRows} />,
-};
-
 const Page1 = () => {
   const { spData, isLoading } = useSharePoint();
+  const [drawerAddOpen, setdrawerAddOpen] = useState(false);
+
+  const handleDrawerToggle = () => {
+    setdrawerAddOpen(!drawerAddOpen);
+  };
+
   return (
     <div>
       <MUIDataTable
         title={
           <Typography variant='h6'>
-            ACME Employee list
+            Employee list
             {isLoading && (
               <CircularProgress
                 size={24}
@@ -76,8 +73,25 @@ const Page1 = () => {
         }
         data={spData}
         columns={columns}
-        options={options}
+        options={{
+          filterType: "dropdown",
+          elevation: 2,
+          selectableRowsOnClick: false,
+          rowsPerPage: 10,
+          customToolbar: () => {
+            return (
+              <CustomToolbar
+                handleDrawerToggle={handleDrawerToggle}
+                drawerAddOpen={drawerAddOpen}
+              />
+            );
+          },
+          customToolbarSelect: (selectedRows) => (
+            <CustomToolbarSelect selectedRows={selectedRows} />
+          ),
+        }}
       />
+      <AddEditDrawer handleDrawerToggle={handleDrawerToggle} drawerAddOpen={drawerAddOpen} />
     </div>
   );
 };
